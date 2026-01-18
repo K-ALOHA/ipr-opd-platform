@@ -66,10 +66,11 @@
     <div class="section-card" id="accessBox" style="display:none;">
       <div class="card-header">
         <h2 class="section-title">Patient Record Access</h2>
-        <p class="section-description">Enter patient access token to view medical records</p>
+        <div id="doctorInfo" class="patient-info-bar"></div>
       </div>
 
       <div class="access-form">
+        <p class="section-description">Enter patient access token to view medical records</p>
         <div class="form-group">
           <label for="tokenInput" class="form-label">Patient Access Token <span class="required">*</span></label>
           <input type="text" id="tokenInput" class="form-input" placeholder="Enter 8-character access token" maxlength="8">
