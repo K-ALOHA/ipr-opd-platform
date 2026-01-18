@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Medical Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-title">Medical Records Management</h1>
+        <p class="app-subtitle">Doctor Portal</p>
+      </div>
+    </header>
+
+    <!-- Doctor Profile Setup -->
+    <div class="section-card" id="doctorProfileBox">
+      <div class="card-header">
+        <h2 class="section-title">Doctor Registration</h2>
+        <p class="section-description">Please complete your profile to access patient records</p>
+      </div>
+
+      <form id="doctorProfileForm" class="form-grid">
+        <div class="form-group">
+          <label for="d-name" class="form-label">Full Name <span class="required">*</span></label>
+          <input type="text" id="d-name" class="form-input" placeholder="Enter doctor name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="d-spec" class="form-label">Specialization <span class="required">*</span></label>
+          <input type="text" id="d-spec" class="form-input" placeholder="e.g., General Physician, Cardiologist" required>
+        </div>
+
+        <div class="form-group">
+          <label for="d-license" class="form-label">Medical License Number</label>
+          <input type="text" id="d-license" class="form-input" placeholder="Enter license number">
+        </div>
+
+        <div class="form-group">
+          <label for="d-hospital" class="form-label">Hospital / Clinic</label>
+          <input type="text" id="d-hospital" class="form-input" placeholder="Enter hospital or clinic name">
+        </div>
+
+        <div class="form-group">
+          <label for="d-contact" class="form-label">Contact Number</label>
+          <input type="tel" id="d-contact" class="form-input" placeholder="Enter contact number">
+        </div>
+
+        <div class="form-group">
+          <label for="d-email" class="form-label">Email Address</label>
+          <input type="email" id="d-email" class="form-input" placeholder="Enter email address">
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="button" onclick="saveDoctorProfile()" class="btn btn-primary">Save Doctor Profile</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Access Patient Records Section -->
+    <div class="section-card" id="accessBox" style="display:none;">
+      <div class="card-header">
+        <h2 class="section-title">Patient Record Access</h2>
+        <p class="section-description">Enter patient access token to view medical records</p>
+      </div>
+
+      <div class="access-form">
+        <div class="form-group">
+          <label for="tokenInput" class="form-label">Patient Access Token <span class="required">*</span></label>
+          <input type="text" id="tokenInput" class="form-input" placeholder="Enter 8-character access token" maxlength="8">
+        </div>
+        <button onclick="accessRecords()" class="btn btn-primary">Access Patient Records</button>
+      </div>
+    </div>
+
+    <!-- Patient Information Display -->
+    <div id="doctorView"></div>
+
+    <!-- Prescription Creation Form -->
+    <div class="section-card" id="prescriptionBox" style="display:none;">
+      <div class="card-header">
+        <h3 class="section-title">Create New Prescription</h3>
+      </div>
+
+      <form id="prescriptionForm" class="form-grid">
+        <div class="form-group full-width">
+          <label for="diag" class="form-label">Diagnosis <span class="required">*</span></label>
+          <textarea id="diag" class="form-input" rows="3" placeholder="Enter primary diagnosis" required></textarea>
+        </div>
+
+        <div class="medications-section full-width">
+          <div class="section-header">
+            <h4>Medications</h4>
+            <p class="section-hint">Dosage format: 1-1-1 (Morning-Afternoon-Evening)</p>
+          </div>
+          
+          <div id="medicineList"></div>
+          
+          <button type="button" onclick="addMedicineRow()" class="btn btn-secondary">
+            <span class="btn-icon">+</span>
+            Add Medication
+          </button>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="advice" class="form-label">Medical Advice</label>
+          <textarea id="advice" class="form-input" rows="4" placeholder="e.g., Rest, adequate hydration, avoid strenuous activities"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="followup" class="form-label">Follow-up Date</label>
+          <input type="date" id="followup" class="form-input">
+        </div>
+
+        <div class="form-group full-width">
+          <label for="notes" class="form-label">Clinical Notes</label>
+          <textarea id="notes" class="form-input" rows="3" placeholder="Additional clinical observations or notes"></textarea>
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="button" onclick="savePrescription()" class="btn btn-primary">Save Prescription</button>
+          <button type="button" onclick="clearPrescriptionForm()" class="btn btn-outline">Clear Form</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="notification" class="notification"></div>
+
+  <script type="module" src="doctor.js"></script>
+</body>
+</html>

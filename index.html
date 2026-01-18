@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Medical Records Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-title">Medical Records Management</h1>
+        <p class="app-subtitle">Patient Portal</p>
+      </div>
+    </header>
+
+    <!-- Cloud Storage Notice -->
+    <div style="background: #d1fae5; border: 1px solid #22c55e; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.875rem; color: #065f46;">
+      <strong>☁️ Cloud Sync Enabled:</strong> Your data is securely stored in Firebase and accessible from any device. 
+      Use the same browser to maintain your session, or share your access token with doctors.
+    </div>
+
+    <!-- Patient Profile Setup -->
+    <div class="section-card" id="patientProfileBox">
+      <div class="card-header">
+        <h2 class="section-title">Patient Registration</h2>
+        <p class="section-description">Please complete your profile to access medical records management</p>
+      </div>
+
+      <form id="profileForm" class="form-grid">
+        <div class="form-group">
+          <label for="p-name" class="form-label">Full Name <span class="required">*</span></label>
+          <input type="text" id="p-name" class="form-input" placeholder="Enter full name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="p-age" class="form-label">Age <span class="required">*</span></label>
+          <input type="number" id="p-age" class="form-input" placeholder="Enter age" min="1" max="150" required>
+        </div>
+
+        <div class="form-group">
+          <label for="p-sex" class="form-label">Gender <span class="required">*</span></label>
+          <select id="p-sex" class="form-input" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="p-blood" class="form-label">Blood Group</label>
+          <select id="p-blood" class="form-input">
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="p-contact" class="form-label">Contact Number</label>
+          <input type="tel" id="p-contact" class="form-input" placeholder="Enter contact number">
+        </div>
+
+        <div class="form-group">
+          <label for="p-email" class="form-label">Email Address</label>
+          <input type="email" id="p-email" class="form-input" placeholder="Enter email address">
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="button" onclick="savePatientProfile()" class="btn btn-primary">Save Profile</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Main Actions -->
+    <div class="section-card" id="mainActions" style="display:none;">
+      <div class="card-header">
+        <h2 class="section-title">Medical Records Dashboard</h2>
+        <div id="patientInfo" class="patient-info-bar"></div>
+      </div>
+
+      <div class="action-buttons">
+        <button onclick="showForm()" class="btn btn-primary">
+          <span class="btn-icon">+</span>
+          Add Medical Record
+        </button>
+        <button onclick="generateToken()" class="btn btn-secondary">
+          <span class="btn-icon">🔑</span>
+          Generate Doctor Access Token
+        </button>
+        <button onclick="window.location.href='doctors.html'" class="btn btn-secondary">
+          <span class="btn-icon">🥼</span>
+          Find Doctors Near Me
+        </button>
+        <button onclick="exportRecords()" class="btn btn-outline">
+          <span class="btn-icon">↓</span>
+          Export Records
+        </button>
+        <button onclick="resetAllData()" class="btn btn-danger">
+          <span class="btn-icon">⚠</span>
+          Reset All Data
+        </button>
+      </div>
+
+      <div id="tokenDisplay" class="token-display"></div>
+    </div>
+
+    <!-- Add Record Form -->
+    <div id="formBox" class="section-card" style="display:none;">
+      <div class="card-header">
+        <h3 class="section-title">Add Past Medical Record</h3>
+        <button onclick="clearForm()" class="btn-close">×</button>
+      </div>
+
+      <form id="recordForm" class="form-grid">
+        <div class="form-group full-width">
+          <label for="title" class="form-label">Record Title <span class="required">*</span></label>
+          <input type="text" id="title" class="form-input" placeholder="e.g., Annual Checkup, Blood Test Results" required>
+        </div>
+
+        <div class="form-group">
+          <label for="datetime" class="form-label">Date of Visit <span class="required">*</span></label>
+          <input type="date" id="datetime" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="doctor" class="form-label">Doctor / Hospital <span class="required">*</span></label>
+          <input type="text" id="doctor" class="form-input" placeholder="e.g., Dr. Smith, City Hospital" required>
+        </div>
+
+        <div class="form-group">
+          <label for="type" class="form-label">Record Type <span class="required">*</span></label>
+          <select id="type" class="form-input" required>
+            <option value="">Select Type</option>
+            <option value="Prescription">Prescription</option>
+            <option value="Lab Report">Lab Report</option>
+            <option value="Scan / Imaging">Scan / Imaging</option>
+            <option value="Discharge Summary">Discharge Summary</option>
+            <option value="Consultation">Consultation</option>
+            <option value="Vaccination">Vaccination</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="file" class="form-label">Upload Document <span class="required">*</span></label>
+          <div class="file-upload-area">
+            <input type="file" id="file" class="file-input" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+            <label for="file" class="file-label">
+              <span class="file-icon">📄</span>
+              <span class="file-text">Choose file or drag here</span>
+              <span class="file-hint">Supported: PDF, JPG, PNG, DOC (Max 10MB)</span>
+            </label>
+          </div>
+          <div id="fileInfo" class="file-info"></div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="notes" class="form-label">Additional Notes</label>
+          <textarea id="notes" class="form-input" rows="3" placeholder="Any additional information or observations"></textarea>
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="button" onclick="addRecord()" class="btn btn-primary">Save Record</button>
+          <button type="button" onclick="clearForm()" class="btn btn-outline">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Medical Timeline -->
+    <div class="timeline-section">
+      <div class="timeline-header">
+        <h3 class="section-title">Medical Timeline</h3>
+        <div class="timeline-filters">
+          <select id="filterType" onchange="filterRecords()" class="filter-select">
+            <option value="">All Types</option>
+            <option value="Prescription">Prescription</option>
+            <option value="Lab Report">Lab Report</option>
+            <option value="Scan / Imaging">Scan / Imaging</option>
+            <option value="Discharge Summary">Discharge Summary</option>
+            <option value="Consultation">Consultation</option>
+            <option value="Vaccination">Vaccination</option>
+          </select>
+          <select id="filterSource" onchange="filterRecords()" class="filter-select">
+            <option value="">All Sources</option>
+            <option value="patient">Patient Uploaded</option>
+            <option value="doctor">Doctor Prescription</option>
+          </select>
+        </div>
+      </div>
+      <div id="timeline"></div>
+    </div>
+
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="notification" class="notification"></div>
+
+  <!-- Load Script -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

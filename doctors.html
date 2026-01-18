@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Doctors - OPDQ Home</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: #f8f8f8;
+      color: #1c1c1c;
+    }
+    
+    /* Top Navigation Bar */
+    .top-nav {
+      background: linear-gradient(135deg, #e23744 0%, #c71f2d 100%);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    
+    .back-link {
+      color: white;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    
+    .back-link:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    
+    /* Main Container */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    /* Header Section */
+    .page-header {
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1c1c1c;
+      margin-bottom: 0.5rem;
+    }
+    
+    .page-subtitle {
+      font-size: 1rem;
+      color: #696969;
+    }
+    
+    /* Controls */
+    .controls-bar {
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    
+    .control-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #1c1c1c;
+    }
+    
+    .sort-select {
+      padding: 0.5rem 1rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.9375rem;
+      background: white;
+      cursor: pointer;
+      flex: 1;
+      max-width: 250px;
+    }
+    
+    /* Doctor Cards */
+    .doctor-card-zomato {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #f0f0f0;
+    }
+    
+    .doctor-card-zomato:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    
+    .doctor-card-main {
+      display: flex;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      gap: 1rem;
+    }
+    
+    .doctor-info-section {
+      flex: 1;
+    }
+    
+    .doctor-name-zomato {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1c1c1c;
+      margin-bottom: 0.25rem;
+    }
+    
+    .doctor-spec-zomato {
+      font-size: 0.9375rem;
+      color: #e23744;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .doctor-hospital-zomato {
+      font-size: 0.875rem;
+      color: #696969;
+      margin-bottom: 0.75rem;
+    }
+    
+    .doctor-meta-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .meta-pill {
+      font-size: 0.8125rem;
+      color: #535353;
+      background: #f5f5f5;
+      padding: 0.375rem 0.75rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    
+    .doctor-opdq-section {
+      display: flex;
+      align-items: center;
+    }
+    
+    .distance-badge-large {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.75rem 1rem;
+      background: #fff5f5;
+      border-radius: 8px;
+    }
+    
+    .distance-icon {
+      font-size: 1.5rem;
+    }
+    
+    .distance-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1c1c1c;
+    }
+    
+    /* OPDQ Info Bar */
+    .opdq-info-bar {
+      display: flex;
+      justify-content: space-around;
+      padding: 0.875rem 1.5rem;
+      background: #fafafa;
+      border-top: 1px solid #f0f0f0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .opdq-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .opdq-stat.highlight {
+      padding: 0 1rem;
+      border-left: 1px solid #e0e0e0;
+      border-right: 1px solid #e0e0e0;
+    }
+    
+    .opdq-label {
+      font-size: 0.75rem;
+      color: #696969;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .opdq-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1c1c1c;
+    }
+    
+    .opdq-stat.highlight .opdq-value {
+      color: #e23744;
+    }
+    
+    /* Arrival Bar */
+    .arrival-bar {
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9375rem;
+    }
+    
+    .arrival-bar.arrival-low {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .arrival-bar.arrival-medium {
+      background: #fff8e1;
+      color: #f57c00;
+    }
+    
+    .arrival-bar.arrival-high {
+      background: #ffebee;
+      color: #c62828;
+    }
+    
+    .arrival-icon {
+      font-size: 1.25rem;
+    }
+    
+    .demo-note {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-top: 2rem;
+      font-size: 0.875rem;
+      color: #663c00;
+    }
+    
+    @media (max-width: 768px) {
+      .doctor-card-main {
+        flex-direction: column;
+      }
+      
+      .distance-badge-large {
+        align-self: flex-start;
+      }
+      
+      .opdq-info-bar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .opdq-stat.highlight {
+        border: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-container">
+      <div class="nav-title">Find Doctors</div>
+      <a href="index.html" class="back-link">← Back to Portal</a>
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-container">
+    
+    <div class="page-header">
+      <h1 class="page-title">Find Doctors Near You</h1>
+      <p class="page-subtitle">Compare distance and OPD wait times to plan your visit</p>
+    </div>
+    
+    <div class="controls-bar">
+      <span class="control-label">Sort by:</span>
+      <select class="sort-select" id="sortBy" onchange="renderDoctorList(this.value)">
+        <option value="distance">Nearest First</option>
+        <option value="waitTime">Shortest Wait Time</option>
+      </select>
+    </div>
+    
+    <div id="doctorList">
+      <!-- Will be populated by JavaScript -->
+    </div>
+    
+    <div class="demo-note">
+      <strong>ℹ️ Demo Note:</strong> Distance and consultation times are manually set for demonstration. 
+      In production, these would be calculated using real-time data and GPS.
+    </div>
+    
+  </div>
+
+  <script>
+    // Doctor Data
+    const doctors = [
+      {
+        id: 'DOC001',
+        name: 'Dr. Rajesh Kumar',
+        specialization: 'General Physician',
+        hospital: 'Apollo Clinic, Anna Nagar',
+        experience: 15,
+        distance: 1.2,
+        opdTimings: '9:00 AM - 2:00 PM',
+        avgConsultationTime: 7,
+        currentToken: 15,
+        patientsAhead: 6,
+        rating: 4.5,
+        consultationFee: 500
+      },
+      {
+        id: 'DOC002',
+        name: 'Dr. Priya Sharma',
+        specialization: 'Cardiologist',
+        hospital: 'Fortis Malar, Adyar',
+        experience: 12,
+        distance: 3.5,
+        opdTimings: '10:00 AM - 1:00 PM',
+        avgConsultationTime: 12,
+        currentToken: 22,
+        patientsAhead: 3,
+        rating: 4.7,
+        consultationFee: 800
+      },
+      {
+        id: 'DOC003',
+        name: 'Dr. Arun Menon',
+        specialization: 'Pediatrician',
+        hospital: 'Mehta Children Hospital, T.Nagar',
+        experience: 8,
+        distance: 2.1,
+        opdTimings: '8:00 AM - 12:00 PM',
+        avgConsultationTime: 10,
+        currentToken: 28,
+        patientsAhead: 8,
+        rating: 4.3,
+        consultationFee: 600
+      },
+      {
+        id: 'DOC004',
+        name: 'Dr. Lakshmi Iyer',
+        specialization: 'Dermatologist',
+        hospital: 'Skin Care Clinic, Nungambakkam',
+        experience: 20,
+        distance: 4.2,
+        opdTimings: '11:00 AM - 3:00 PM',
+        avgConsultationTime: 15,
+        currentToken: 10,
+        patientsAhead: 2,
+        rating: 4.8,
+        consultationFee: 700
+      },
+      {
+        id: 'DOC005',
+        name: 'Dr. Suresh Reddy',
+        specialization: 'Orthopedic',
+        hospital: 'Bone & Joint Clinic, Velachery',
+        experience: 18,
+        distance: 5.8,
+        opdTimings: '9:30 AM - 1:30 PM',
+        avgConsultationTime: 18,
+        currentToken: 18,
+        patientsAhead: 5,
+        rating: 4.6,
+        consultationFee: 900
+      }
+    ];
+
+    // Calculate Wait Time
+    function calculateWaitTime(doctor) {
+      return doctor.patientsAhead * doctor.avgConsultationTime;
+    }
+
+    // Format Wait Time
+    function formatWaitTime(minutes) {
+      if (minutes < 60) {
+        return `~${minutes} min`;
+      }
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      return mins > 0 ? `~${hours}h ${mins}m` : `~${hours}h`;
+    }
+
+    // Get Suggested Arrival
+    function getSuggestedArrival(doctor) {
+      const waitMinutes = calculateWaitTime(doctor);
+      const now = new Date();
+      const arrivalStart = new Date(now.getTime() + (waitMinutes - 15) * 60000);
+      const arrivalEnd = new Date(now.getTime() + waitMinutes * 60000);
+      
+      const formatTime = (date) => {
+        return date.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: true 
+        });
+      };
+      
+      return {
+        start: formatTime(arrivalStart),
+        end: formatTime(arrivalEnd),
+        waitMinutes: waitMinutes
+      };
+    }
+
+    // Get Wait Status
+    function getWaitStatus(minutes) {
+      if (minutes <= 30) return 'low';
+      if (minutes <= 60) return 'medium';
+      return 'high';
+    }
+
+    // Render Doctor List
+    function renderDoctorList(sortBy = 'distance') {
+      const container = document.getElementById('doctorList');
+      
+      let sortedDoctors = [...doctors];
+      if (sortBy === 'distance') {
+        sortedDoctors.sort((a, b) => a.distance - b.distance);
+      } else if (sortBy === 'waitTime') {
+        sortedDoctors.sort((a, b) => calculateWaitTime(a) - calculateWaitTime(b));
+      }
+      
+      container.innerHTML = sortedDoctors.map(doctor => {
+        const waitTime = calculateWaitTime(doctor);
+        const arrival = getSuggestedArrival(doctor);
+        const waitStatus = getWaitStatus(waitTime);
+        
+        return `
+          <div class="doctor-card-zomato">
+            <div class="doctor-card-main">
+              <div class="doctor-info-section">
+                <h3 class="doctor-name-zomato">${doctor.name}</h3>
+                <p class="doctor-spec-zomato">${doctor.specialization}</p>
+                <p class="doctor-hospital-zomato">🏥 ${doctor.hospital}</p>
+                <div class="doctor-meta-row">
+                  <span class="meta-pill">⭐ ${doctor.rating}</span>
+                  <span class="meta-pill">${doctor.experience} yrs exp</span>
+                  <span class="meta-pill">₹${doctor.consultationFee}</span>
+                </div>
+              </div>
+              
+              <div class="doctor-opdq-section">
+                <div class="distance-badge-large">
+                  <span class="distance-icon">📍</span>
+                  <span class="distance-value">${doctor.distance} km</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="opdq-info-bar">
+              <div class="opdq-stat">
+                <span class="opdq-label">Patients Ahead</span>
+                <span class="opdq-value">${doctor.patientsAhead}</span>
+              </div>
+              <div class="opdq-stat">
+                <span class="opdq-label">Avg Time</span>
+                <span class="opdq-value">${doctor.avgConsultationTime} min</span>
+              </div>
+              <div class="opdq-stat highlight">
+                <span class="opdq-label">Est. Wait</span>
+                <span class="opdq-value">${formatWaitTime(waitTime)}</span>
+              </div>
+            </div>
+            
+            <div class="arrival-bar arrival-${waitStatus}">
+              <span class="arrival-icon">🕒</span>
+              <span class="arrival-text">Arrive around <strong>${arrival.start} - ${arrival.end}</strong></span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDoctorList('distance');
+    });
+  </script>
+</body>
+</html>
