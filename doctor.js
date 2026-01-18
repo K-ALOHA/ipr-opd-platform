@@ -93,7 +93,47 @@ async function checkDoctorProfile() {
   } else {
     profileBox.style.display = 'none';
     accessBox.style.display = 'block';
+    displayDoctorInfo();
   }
+}
+
+/**
+ * Display Doctor Information
+ */
+function displayDoctorInfo() {
+  const infoBar = document.getElementById('doctorInfo');
+  
+  if (doctorProfile) {
+    infoBar.innerHTML = `
+      <div class="info-item"><strong>Name:</strong> ${doctorProfile.name}</div>
+      <div class="info-item"><strong>Specialization:</strong> ${doctorProfile.specialization}</div>
+      ${doctorProfile.license ? `<div class="info-item"><strong>License:</strong> ${doctorProfile.license}</div>` : ''}
+      ${doctorProfile.hospital ? `<div class="info-item"><strong>Hospital:</strong> ${doctorProfile.hospital}</div>` : ''}
+      <div class="info-item"><span style="color: #22c55e; font-size: 0.75rem;">☁️ Cloud Synced</span></div>
+      <button onclick="editDoctorProfile()" class="btn btn-sm btn-outline" style="margin-left: auto;">Edit Profile</button>
+    `;
+  }
+}
+
+/**
+ * Edit Doctor Profile
+ */
+function editDoctorProfile() {
+  if (!confirm('Are you sure you want to edit your profile?')) {
+    return;
+  }
+  
+  document.getElementById('d-name').value = doctorProfile.name || '';
+  document.getElementById('d-spec').value = doctorProfile.specialization || '';
+  document.getElementById('d-license').value = doctorProfile.license || '';
+  document.getElementById('d-hospital').value = doctorProfile.hospital || '';
+  document.getElementById('d-contact').value = doctorProfile.contact || '';
+  document.getElementById('d-email').value = doctorProfile.email || '';
+  
+  document.getElementById('doctorProfileBox').style.display = 'block';
+  document.getElementById('accessBox').style.display = 'none';
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /**
@@ -607,6 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Make functions globally accessible
 window.saveDoctorProfile = saveDoctorProfile;
+window.editDoctorProfile = editDoctorProfile;
 window.accessRecords = accessRecords;
 window.openPatientFile = openPatientFile;
 window.addMedicineRow = addMedicineRow;
